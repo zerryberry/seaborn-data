@@ -1,0 +1,39 @@
+# This is the ML algorithm for the Classic Titanic dataset which is scored over 78% accuracy. 
+
+import pandas as pd
+import numpy as np
+import zipfile
+z= zipfile.ZipFile(r'C:\Users\DELL\Downloads\Data\titanic.zip')
+train= pd.read_csv(z.open('train.csv'), index_col = 0)
+test= pd.read_csv(z.open('test.csv'), index_col = 0)
+
+features_to_drop = ['Name', 'Age', 'Ticket', 'Cabin']
+df.drop(features_to_drop, axis= 1, inplace= True)
+df1.drop(features_to_drop, axis=1, inplace= True)
+df.Sex= df.Sex.map({'male': 0, 'female':1})
+df1.Sex= df1.Sex.map({'male': 0, 'female':1})
+df.Embarked= df.Embarked.map({'S':0, 'C':1, 'Q':2})
+df1.Embarked= df1.Embarked.map({'S':0, 'C':1, 'Q':2})
+
+df.reset_index(inplace= True)
+df1.reset_index(inplace= True)
+
+df1.fillna(0, inplace= True)
+df.dropna(inplace= True)
+df_train= df
+df_test= df1
+
+y= df_train['Survived']
+df_train.drop({'Survived'}, axis= 1, inplace= True)
+df2= df_train
+df2.drop({'PassengerId'}, axis= 1, inplace= True)
+
+from sklearn.model_selection import train_test_split
+X_train, x_test, y_train, y_test= train_test_split(df2, y, random_state= 0)
+
+from sklearn.ensemble import GradientBoostingClassifier
+gbrt= GradientBoostingClassifier(n_estimators= 200,  max_depth= 4, learning_rate= 0.02, random_state = 0)
+
+gbrt.fit(df2, y)
+gbrt.score(df2, y) ### ( Comes around 0.8683914510686164)
+
